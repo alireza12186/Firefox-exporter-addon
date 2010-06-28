@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!DOCTYPE overlay >
+<overlay id="blogfaexporter-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	<script type="application/x-javascript" src="chrome://exporter/content/exporter.js"/>
+	<script type="application/x-javascript" src="chrome://exporter/content/wxr.js"/>
+	<script type="application/x-javascript" src="chrome://exporter/content/parser.js"/>
+	
+	<menupopup id="menu_ToolsPopup">
+		<menuitem insertafter="devToolsSeparator" label="Weblog Exporter" oncommand="Exporter.setWeblog();" />
+	</menupopup>
+
+</overlay>

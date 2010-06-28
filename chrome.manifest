@@ -1,0 +1,2 @@
+content     exporter    chrome/content/
+overlay chrome://browser/content/browser.xul chrome://exporter/content/exporter.xul
