@@ -702,12 +702,18 @@ Exporter.Services.MIHANBLOG = {
 	parsePosts		: function(){
 		if(Exporter.step==0)
 			Exporter.Services.BLOGFA.getIntTimeZone();
-		var posts = Exporter.doXPath(Exporter.main, "//body/div[@class='CONBG']/div[@class='CON']/div[@class='SC']/div[@id]");
+		var posts = Exporter.doXPath(Exporter.main, "//body/div[@class='CONBG']/div[@class='CON']/div[@class='SC']/div[@class='Post clearfix']");
 		var result = new Array();
 		for(var i in posts){
 			var post = posts[i];
 			if(!post.getAttribute("id") || !post.getAttribute("id").match(/^[0-9]+$/))
 				continue;
+			var _ads = Exporter.main.getElementById("InPost_MihanblogShopAds");
+			if(_ads)
+				_ads.parentNode.removeChild(_ads);
+			var _tags = post.getElementsByTagName("ul");
+			if(_tags.length>1 && _tags[_tags.length-2].className=='clearfix')
+				_tags[_tags.length-2].parentNode.removeChild(_tags[_tags.length-2]);
 			var links = post.getElementsByTagName("a");
 			var divs = post.getElementsByTagName("div");
 			var postLinks = divs[3].getElementsByTagName("a");
@@ -725,7 +731,7 @@ Exporter.Services.MIHANBLOG = {
 				Exporter.log('extended post? '+postLinks[postLinks.length-1].getAttribute("href")+'=='+tempObj.link);
 			if(tempObj.extended==true)
 				postLinks[postLinks.length-1].parentNode.removeChild(postLinks[postLinks.length-1]);
-			tempObj.content = divs[3].innerHTML;
+			tempObj.content = divs[3].innerHTML.replace('<p>&nbsp;&nbsp;&nbsp;</p><br>', '');
 			var date = divs[0].getElementsByTagName('small')[0].innerHTML.split("/"); // YYYY/MM/DD
 			///var time = divs[divs.length-1].innerHTML.match(/nbsp;([0-9]+:[0-9]+)&nbsp;/)[1].split(":"); // HH:SS
 			date = Exporter.clear0(date);
