@@ -16,6 +16,7 @@ var Exporter = {
 	archives	: new Array(),
 	comments	: new Array(),
 	extended	: new Array(),
+	jsLoader	: Components.classes["@mozilla.org/moz/jssubscript-loader;1"].getService(Components.interfaces.mozIJSSubScriptLoader),
 	init		: function(){
 		try {
 			Exporter.main = gBrowser.selectedBrowser.contentDocument;
@@ -184,10 +185,18 @@ var Exporter = {
 		}
 	},
 	setWeblog	: function(){
+		// load common.js & wxt.js if are not loaded yet
+		if(!Exporter.wSystems){
+			Exporter.jsLoader.loadSubScript("chrome://exporter/content/common.js");
+			Exporter.jsLoader.loadSubScript("chrome://exporter/content/wxr.js");
+		}
 		for(var i=0; i<Exporter.wSystems.length; i++){
 			if(Exporter.wSystems[i].panel.test(gBrowser.selectedBrowser.contentDocument.location.href)){
 				try{
 					Exporter.main = gBrowser.selectedBrowser.contentDocument;
+					// load weblog module if is not loaded yet
+					if(!Exporter.Services[Exporter.wSystems[i].variable])
+						Exporter.jsLoader.loadSubScript("chrome://exporter/content/parsers/"+Exporter.wSystems[i].variable.toLowerCase()+".js");
 					Exporter.PARSER = Exporter.Services[Exporter.wSystems[i].variable];
 					Exporter.weblog = Exporter.PARSER.getWeblogFromPanel().toLowerCase();
 					if(Exporter.debug==true)
