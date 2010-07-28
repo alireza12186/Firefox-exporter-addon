@@ -1,2 +1,5 @@
 content     exporter    chrome/content/
 overlay chrome://browser/content/browser.xul chrome://exporter/content/exporter.xul
+
+locale		exporter	en-US	chrome/locale/en-US/
+locale		exporter	fa-IR	chrome/locale/fa-IR/
