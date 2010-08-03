@@ -16,6 +16,7 @@ var Exporter = {
 	archives	: new Array(),
 	comments	: new Array(),
 	extended	: new Array(),
+	progressWin : false,
 	jsLoader	: Components.classes["@mozilla.org/moz/jssubscript-loader;1"].getService(Components.interfaces.mozIJSSubScriptLoader),
 	init		: function(){
 		try {
@@ -49,14 +50,15 @@ var Exporter = {
 						if(posts[i].extended==true)
 							Exporter.extended.push(posts[i].id);
 					}
-					Exporter.step++;
+					Exporter.step++; // go to archive's next step
+					Exporter.updateProgress();
 					if(Exporter.step<Exporter.archives.length)
 						Exporter.goTo(Exporter.archives[Exporter.step]);
 					else {
 						if(Exporter.comments.length>0){
 							Exporter.level = "comments";
 							Exporter.step = 0;
-							for(key in Exporter.comments) break;
+							var key = Exporter.step;
 							Exporter.goTo(Exporter.PARSER.postToCommentURL(Exporter.comments[key][0]));
 							return;
 						} else if(Exporter.extended.length>0) {
@@ -71,7 +73,7 @@ var Exporter = {
 					}
 				}
 				if(Exporter.level == "comments" && Exporter.comments.length>0){
-					for(key in Exporter.comments) break;
+					key = Exporter.step;
 					if(Exporter.debug==true)
 						Exporter.log("key: "+key+"\npost: "+Exporter.comments[key][0]+"\ncomment: "+Exporter.comments[key][1]);
 					if(typeof(Exporter.comments[key][1]) == "boolean" && Exporter.secondStep==false){ // we should get the number manualy so go to page
@@ -96,11 +98,12 @@ var Exporter = {
 						if(typeof(tempCount)=="boolean"){
 							if(Exporter.debug==true)
 								Exporter.log("if 2.1.0");
-							Exporter.comments.shift();
-							if(Exporter.comments.length>0){
+							Exporter.step++; // comment's next step
+							Exporter.updateProgress();
+							if(Exporter.step<Exporter.comments.length){ // we have posts yet
 								if(Exporter.debug==true)
 									Exporter.log("if 2.1.1");
-								for(key in Exporter.comments) break;
+								var key = Exporter.step;
 								if(Exporter.debug==true)
 									Exporter.log("key: "+key+"\npost: "+Exporter.comments[key][0]+"\ncomment: "+Exporter.comments[key][1]);
 								Exporter.goTo(Exporter.PARSER.postToCommentURL(Exporter.comments[key][0]));
@@ -143,11 +146,12 @@ var Exporter = {
 					} else { // comments fetched go to next
 						if(Exporter.debug==true)
 							Exporter.log("else 4.1");
-						Exporter.comments.shift();
-						if(Exporter.comments.length>0){ // we have posts yet
+						Exporter.step++; // comment's next step
+						Exporter.updateProgress();
+						if(Exporter.step<Exporter.comments.length){ // we have posts yet
 							if(Exporter.debug==true)
 								Exporter.log("if 4.1.1");
-							for(key in Exporter.comments) break;
+							var key = Exporter.step;
 							if(Exporter.debug==true)
 								Exporter.log("key: "+key+"\npost: "+Exporter.comments[key][0]+"\ncomment: "+Exporter.comments[key][1]);
 							Exporter.goTo(Exporter.PARSER.postToCommentURL(Exporter.comments[key][0]));
@@ -173,7 +177,8 @@ var Exporter = {
 						POST = POST[0];
 						Exporter.WXR.addExtended(Exporter.extended[Exporter.step], POST.content);
 					}
-					Exporter.step++;
+					Exporter.step++; // extended's next step
+					Exporter.updateProgress();
 					if(Exporter.step<Exporter.extended.length)
 						Exporter.goTo(Exporter.PARSER.idToPostURL(Exporter.extended[Exporter.step]));
 					else
@@ -181,6 +186,7 @@ var Exporter = {
 				}
 			}
 		} catch(e) {
+			Exporter.progressWin = false;
 			Exporter.log(e.message+'\n'+e.fileName+':'+e.lineNumber);
 		}
 	},
@@ -189,6 +195,12 @@ var Exporter = {
 		if(!Exporter.wSystems){
 			Exporter.jsLoader.loadSubScript("chrome://exporter/content/common.js");
 			Exporter.jsLoader.loadSubScript("chrome://exporter/content/wxr.js");
+		}
+		if(Exporter.progressWin==false || Exporter.progressWin.document==null)
+			Exporter.progressWin = window.open("chrome://exporter/content/progress.xul", "exporter_progress_win", "chrome,width=310,height=80");
+		else {
+			Exporter.updateProgress();
+			return;
 		}
 		for(var i=0; i<Exporter.wSystems.length; i++){
 			if(Exporter.wSystems[i].panel.test(gBrowser.selectedBrowser.contentDocument.location.href)){
@@ -284,6 +296,7 @@ var Exporter = {
 		Exporter.archives = new Array();
 		Exporter.comments = new Array();
 		Exporter.extended = new Array();
+		Exporter.progressWin = false;
 	},
 	consoleService	: Components.classes["@mozilla.org/consoleservice;1"].getService(Components.interfaces.nsIConsoleService),
 	log		: function(msg){
@@ -388,6 +401,36 @@ var Exporter = {
 		for(var nn=0, nnlen=a.length; nn<nnlen && a[nn].length>1; nn++)
 			a[nn] = a[nn].replace(/^0/, '');
 		return a;
+	},
+	updateProgress : function(){
+		var total = 0;
+		var progressmeter = null;
+		var label = null
+		if(Exporter.progressWin==false || Exporter.progressWin.document==null)
+			return false;
+		switch(Exporter.level){
+			case "posts":
+				total = Exporter.archives.length;
+				progressmeter = Exporter.progressWin.document.getElementById("posts_prog");
+				label = Exporter.progressWin.document.getElementById("posts_label");
+				break;
+			case "comments":
+				total = Exporter.comments.length;
+				progressmeter = Exporter.progressWin.document.getElementById("comments_prog");
+				label = Exporter.progressWin.document.getElementById("comments_label");
+				break
+			case "extended":
+				total = Exporter.extendeds.length;
+				progressmeter = Exporter.progressWin.document.getElementById("extended_prog");
+				label = Exporter.progressWin.document.getElementById("extended_label");
+				break;
+		}
+		if(progressmeter!=null && total>0){
+			Exporter.log(progressmeter.getAttribute('value')+' '+label.getAttribute('value'));
+			progressmeter.setAttribute("value", parseInt(Exporter.step*100/total));
+			label.setAttribute("value", Exporter.step+"/"+total);
+		}
+		return true;
 	}
 };
 
