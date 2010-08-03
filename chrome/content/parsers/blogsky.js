@@ -73,7 +73,7 @@ Exporter.Services.BLOGSKY = {
 			tempObj.commentsCount = (footerLinks.length-1>0 && footerLinks[footerLinks.length-1].hasAttribute('onclick'))?parseInt(footerLinks[footerLinks.length-1].innerHTML.match(/^([0-9]+)/)[1]):0;
 			if(postLinks.length>0 && postLinks[postLinks.length-1].hasAttribute("href") && postLinks[postLinks.length-1].getAttribute("href").indexOf("http://")!=0)
 				postLinks[postLinks.length-1].setAttribute("href", Exporter.weblog+postLinks[postLinks.length-1].getAttribute("href").replace(/^[\/]{1}/, ""));
-			tempObj.extended = (postLinks.length>0 && postLinks[postLinks.length-1].getAttribute("href")==tempObj.link && postLinks[postLinks.length-1].innerHTML==" ادامه مطلب ...")?true:false;
+			tempObj.extended = (postLinks.length>0 && postLinks[postLinks.length-1].getAttribute("href")==tempObj.link && postLinks[postLinks.length-1].innerHTML==" \u0627\u062f\u0627\u0645\u0647 \u0645\u0637\u0644\u0628 ...")?true:false;
 			if(tempObj.extended==true)
 				postLinks[postLinks.length-1].parentNode.removeChild(postLinks[postLinks.length-1]);
 			Exporter.removeNode(divs[2]);

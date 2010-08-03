@@ -70,7 +70,7 @@ Exporter.Services.BLOGFA = {
 			tempObj.commentsCount = Exporter.Services.BLOGFA.getCommentsCountByScript(tempObj.id);
 			if(postLinks.length>0 && postLinks[postLinks.length-1].hasAttribute("href") && postLinks[postLinks.length-1].getAttribute("href").indexOf("http://")!=0)
 				postLinks[postLinks.length-1].setAttribute("href", Exporter.weblog+postLinks[postLinks.length-1].getAttribute("href"));
-			tempObj.extended = (postLinks.length>0 && postLinks[postLinks.length-1].getAttribute("href")==tempObj.link && postLinks[postLinks.length-1].innerHTML=="ادامه مطلب")?true:false;
+			tempObj.extended = (postLinks.length>0 && postLinks[postLinks.length-1].getAttribute("href")==tempObj.link && postLinks[postLinks.length-1].innerHTML=="\u0627\u062f\u0627\u0645\u0647 \u0645\u0637\u0644\u0628")?true:false;
 			if(tempObj.extended==true)
 				postLinks[postLinks.length-1].parentNode.removeChild(postLinks[postLinks.length-1]);
 			Exporter.removeNode(divs[1]);
@@ -82,7 +82,7 @@ Exporter.Services.BLOGFA = {
 			tempObj.date = new Date(parseInt(date[0]), parseInt(date[1])-1, parseInt(date[2]), parseInt(time[0]), parseInt(time[1]), 0);
 			tempObj.category = ""; // default blogfa template doesn't support category
 			try{
-				tempObj.author = divs[divs.length-1].innerHTML.match(/توسط&nbsp;([^&]+)&nbsp;/)[1];
+				tempObj.author = divs[divs.length-1].innerHTML.match(/\u062a\u0648\u0633\u0637&nbsp;([^&]+)&nbsp;/)[1];
 			} catch(e){
 				tempObj.author = null;
 			}
@@ -137,7 +137,7 @@ Exporter.Services.BLOGFA = {
 		if(firstTD.length==0)
 			return false;
 		firstTD = firstTD[0].innerHTML;
-		var count = firstTD.match(/- ([0-9]+) نظر/);
+		var count = firstTD.match(/- ([0-9]+) \u0646\u0638\u0631/);
 		if(!count)
 			return false;
 		return parseInt(count[1]);

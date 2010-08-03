@@ -88,7 +88,7 @@ Exporter.Services.PERSIANBLOG = {
 			//Exporter.log(PERSIANBLOG.p2e(temp[1]));
 			var time = Exporter.Services.PERSIANBLOG.p2e(temp[1]).match(/([0-9]+):([0-9]+)/); // HH:mm
 			time = Exporter.clear0(time);
-			if(temp[1].indexOf("ب.ظ")>-1)
+			if(temp[1].indexOf("\u0628.\u0638")>-1)
 				time[1] = parseInt(time[1])+12;
 			//Exporter.log("Converted Date:"+PERSIANBLOG.p2e(temp[2]));
 			var date = Exporter.Services.PERSIANBLOG.p2e(temp[2]).match(/([0-9]+)\/([0-9]+)\/([0-9]+)/); // YYYY/MM/DD
@@ -100,7 +100,7 @@ Exporter.Services.PERSIANBLOG = {
 			post.removeChild(divs[divs.length-1]);
 			var postLinks = post.getElementsByTagName("a");
 			tempObj.commentsCount = Exporter.Services.PERSIANBLOG.getCommentsCountByScript(tempObj.id);
-			tempObj.extended = (postLinks.length>0 && postLinks[postLinks.length-1].getAttribute("href")==tempObj.link && postLinks[postLinks.length-1].innerHTML==" ادامه مطلب ")?true:false;
+			tempObj.extended = (postLinks.length>0 && postLinks[postLinks.length-1].getAttribute("href")==tempObj.link && postLinks[postLinks.length-1].innerHTML==" \u0627\u062f\u0627\u0645\u0647 \u0645\u0637\u0644\u0628 ")?true:false;
 			if(tempObj.extended==true)
 				// remove last link
 				post.removeChild(postLinks[postLinks.length-1]);
@@ -123,8 +123,8 @@ Exporter.Services.PERSIANBLOG = {
 		return result;
 	},
 	p2e				: function(str){
-		var p = ["٠","۱","٢","۳","٤","٥","٦","٧","۸","٩","۳","۱","۱","٤","۸","٢","٥","٠","۸","٢","۱","۳","٦","٩","٧","٧","٥","۸", "۳"];
-		var e = ["0","1","2","3","4","5","6","7","8","9","3","1","1","4","8","2","5","0","8","2","1","3","6","9","7","7","5","8", "3"];
+		var p = "\u0660\u06f1\u0662\u06f3\u0664\u0665\u0666\u0667\u06f8\u0669\u06f3\u06f1\u06f1\u0664\u06f8\u0662\u0665\u0660\u06f8\u0662\u06f1\u06f3\u0666\u0669\u0667\u0667\u0665\u06f8\u06f3";
+		var e = "01234567893114825082136977583";
 		for(var i=0; i<p.length; i++)
 			str = str.replace(p[i], e[i]);
 		Exporter.log('p2e convertor: '+str);
@@ -158,7 +158,7 @@ Exporter.Services.PERSIANBLOG = {
 				Exporter.log('comment author: '+Exporter.Services.PERSIANBLOG.p2e(spans[0].innerHTML));
 			var time = Exporter.Services.PERSIANBLOG.p2e(spans[2].innerHTML).match(/([0-9]+):([0-9]+)/);
 			time = Exporter.clear0(time);
-			if(spans[2].innerHTML.indexOf("ب.ظ")>-1)
+			if(spans[2].innerHTML.indexOf("\u0628.\u0638")>-1)
 				time[1] = parseInt(time[1])+12;
 			if(Exporter.debug==true)
 				Exporter.log('converted numbers: '+Exporter.Services.PERSIANBLOG.p2e(spans[2].innerHTML));
