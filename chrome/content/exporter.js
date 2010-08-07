@@ -410,27 +410,27 @@ var Exporter = {
 		var label = null
 		if(Exporter.progressWin==false || Exporter.progressWin.document==null)
 			return false;
-		switch(Exporter.level){
-			case "posts":
-				total = Exporter.archives.length;
-				progressmeter = Exporter.progressWin.document.getElementById("posts_prog");
-				label = Exporter.progressWin.document.getElementById("posts_label");
-				break;
-			case "comments":
-				total = Exporter.comments.length;
-				progressmeter = Exporter.progressWin.document.getElementById("comments_prog");
-				label = Exporter.progressWin.document.getElementById("comments_label");
-				break
-			case "extended":
-				total = Exporter.extendeds.length;
-				progressmeter = Exporter.progressWin.document.getElementById("extended_prog");
-				label = Exporter.progressWin.document.getElementById("extended_label");
-				break;
-		}
-		if(progressmeter!=null && total>0){
-			Exporter.log(progressmeter.getAttribute('value')+' '+label.getAttribute('value'));
-			progressmeter.setAttribute("value", parseInt(Exporter.step*100/total));
-			label.setAttribute("value", Exporter.step+"/"+total);
+		var xvars = {
+			archives: ['posts_prog', 'posts_label'],
+			comments: ['comments_prog', 'comments_label'],
+			extended: ['extended_prog', 'extended_label']
+		};
+		for(var x in xvars){
+			total = Exporter[x].length;
+			if(total==0)
+				continue;
+			progressmeter = Exporter.progressWin.document.getElementById(xvars[x][0]);
+			label = Exporter.progressWin.document.getElementById(xvars[x][1]);
+			// should use previous state if we're not fetching same state
+			var state = parseInt(label.getAttribute('value').split('/')[0]);
+			if(
+				Exporter.level=='posts' && x=='archives' || // posts
+				Exporter.level=='comments' && x=='comments' || // comments
+				Exporter.level=='extended' && x=='extended' // extendeds
+			)
+				state = Exporter.step;
+			label.setAttribute("value", state+"/"+total);
+			progressmeter.setAttribute("value", parseInt(state*100/total));
 		}
 		return true;
 	}
