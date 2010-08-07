@@ -2,26 +2,29 @@
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 <!DOCTYPE overlay SYSTEM "chrome://exporter/locale/progress.dtd">
 <window title="&progress.title;" orient="horizontal" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-	<hbox>
-		<!-- use vbox/hbox to avoid setting width for labels -->
-		<vbox>
-			<label value="&exporter.posts;" />
-			<label value="&exporter.comments;" />
-			<label value="&exporter.extendeds;" />
-		</vbox>
-		<vbox>
-			<hbox>
-				<progressmeter id="posts_prog" mode="determined" value="0"/>
-				<label id="posts_label" value="0/0" />
-			</hbox>
-			<hbox>
-				<progressmeter id="comments_prog" mode="determined" value="0"/>
-				<label id="comments_label" value="0/0" />
-			</hbox>
-			<hbox>
-				<progressmeter id="extended_prog" mode="determined" value="0"/>
-				<label id="extended_label" value="0/0" />
-			</hbox>
-		</vbox>
-	</hbox>
+	<vbox flex="1">
+		<hbox flex="1">
+			<!-- use vbox/hbox to avoid setting width for labels -->
+			<vbox>
+				<label value="&exporter.posts;" />
+				<label value="&exporter.comments;" />
+				<label value="&exporter.extendeds;" />
+			</vbox>
+			<vbox flex="1">
+				<hbox>
+					<progressmeter id="posts_prog" mode="determined" value="0"/>
+					<label id="posts_label" value="0/0" />
+				</hbox>
+				<hbox>
+					<progressmeter id="comments_prog" mode="determined" value="0"/>
+					<label id="comments_label" value="0/0" />
+				</hbox>
+				<hbox>
+					<progressmeter id="extended_prog" mode="determined" value="0"/>
+					<label id="extended_label" value="0/0" />
+				</hbox>
+			</vbox>
+		</hbox>
+		<description id="status"></description>
+	</vbox>
 </window>
