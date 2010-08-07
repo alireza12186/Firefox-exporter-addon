@@ -196,9 +196,11 @@ var Exporter = {
 			Exporter.jsLoader.loadSubScript("chrome://exporter/content/common.js");
 			Exporter.jsLoader.loadSubScript("chrome://exporter/content/wxr.js");
 		}
-		if(Exporter.progressWin==false || Exporter.progressWin.document==null)
-			Exporter.progressWin = window.open("chrome://exporter/content/progress.xul", "exporter_progress_win", "chrome,width=310,height=80");
-		else {
+		if(Exporter.progressWin==false || Exporter.progressWin.document==null){
+			Exporter.progressWin = window.open("chrome://exporter/content/progress.xul", "exporter_progress_win", "chrome,width=330,height=110");
+			if(Exporter.level!=null) // just reopen progressWin if we are exporting now
+				return;
+		} else {
 			Exporter.updateProgress();
 			return;
 		}
