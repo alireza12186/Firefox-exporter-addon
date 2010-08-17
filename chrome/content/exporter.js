@@ -12,7 +12,6 @@ var Exporter = {
 	intTimeZone	: null,
 	PARSER		: null,
 	loadPage	: true,
-	ThemeAndSettings: "\nلطفا مراحل انجام کار و مخصوصا تنظیمات و قالب را دوباره مرور کنید و در صورتی که همچنان این پیام را دربافت می‌کردید گزارش خطا بدهید",
 	archives	: new Array(),
 	comments	: new Array(),
 	extended	: new Array(),
@@ -37,12 +36,12 @@ var Exporter = {
 					if(Exporter.archives.length>0)
 						Exporter.goTo(Exporter.archives[Exporter.step]);
 					else
-						alert("موردی برای انتقال پیدا نشد"+Exporter.ThemeAndSettings);
+						alert(Exporter.jsProperties.getString('noPostFound')+'\n'+Exporter.jsProperties.getString('ThemeAndSettings'));
 				} else if(Exporter.level=="posts" && Exporter.step<Exporter.archives.length) {
 					// we should fetch posts
 					var posts = Exporter.PARSER.parsePosts();
 					if(posts.length==0)
-						Exporter.log("مشکلی در پیدا کردن مطالب در این صفحه رخ داده است\n"+Exporter.archives[Exporter.step]+Exporter.ThemeAndSettings);
+						Exporter.log(Exporter.jsProperties.getString('problemInPage')+"\n"+Exporter.archives[Exporter.step]+'\n'+Exporter.jsProperties.getString('ThemeAndSettings'));
 					for(var i=posts.length-1; i>=0; i--){
 						Exporter.WXR.insertPost(posts[i]);
 						if(posts[i].commentsCount>0 || Exporter.PARSER.reCheckComments==true)
@@ -172,7 +171,7 @@ var Exporter = {
 				if(Exporter.level=="extended" && Exporter.extended.length>Exporter.step){
 					var POST = Exporter.PARSER.parsePosts();
 					if(POST.length!=1){
-						Exporter.log("مشکلی در پیدا کردن ادامه ی مطلب رخ داد\n"+Exporter.main.location.href+Exporter.ThemeAndSettings);
+						Exporter.log(Exporter.jsProperties.getString('problemInPage')+"\n"+Exporter.archives[Exporter.step]+'\n'+Exporter.jsProperties.getString('ThemeAndSettings'));
 					} else {
 						POST = POST[0];
 						Exporter.WXR.addExtended(Exporter.extended[Exporter.step], POST.content);
@@ -273,13 +272,13 @@ var Exporter = {
 				stream.close();
 			}
 
+			Exporter.log(Exporter.jsProperties.getString('done'));
+			if(Exporter.progressWin!=false && Exporter.progressWin.document!=null)
+				Exporter.progressWin.document.getElementById('status').innerHTML = Exporter.jsProperties.getString('done');
 			Exporter.reset();
-			Exporter.log("تهیه ی نسخه ی پشتیبان پایان یافت");
-			alert("تهیه ی نسخه ی پشتیبان پایان یافت");
 		} catch(e) {
 			Exporter.log('ERROR: '+e.message+'\n'+e.fileName+':'+e.lineNumber);
 		}
-
 	},
 	reset		: function(){
 		Exporter.result = Exporter.domParser.parseFromString(Exporter.baseStr, "text/xml");
@@ -396,7 +395,7 @@ var Exporter = {
 			case 'اسفند':
 				return 12;
 			default:
-				Exporter.log('نام ماه پیدا نشد، لطفا گزارش خطا کنید');
+				Exporter.log(Exporter.jsProperties.getString('monthName'));
 		}
 	},
 	clear0 : function(a){

@@ -25,6 +25,8 @@
 				</hbox>
 			</vbox>
 		</hbox>
-		<description id="status"></description>
+		<description>
+			<html:p id="status"></html:p>
+		</description>
 	</vbox>
 </window>
