@@ -1,7 +1,7 @@
 
-Exporter.Services = new Object();
-Exporter.JalaliDate = new Object();
-Exporter.wSystems = new Array();
+Exporter.Services = {};
+Exporter.JalaliDate = {};
+Exporter.wSystems = [];
 
 Exporter.JalaliDate.g_days_in_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 Exporter.JalaliDate.j_days_in_month = [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29];

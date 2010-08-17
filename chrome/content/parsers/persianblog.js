@@ -1,7 +1,7 @@
 
 Exporter.Services.PERSIANBLOG = {
 	weblogId			: null,
-	idToMainId			: new Array(),
+	idToMainId			: [],
 	archive				: "",
 	reCheckComments			: false,
 	_cc				: null,
@@ -41,7 +41,7 @@ Exporter.Services.PERSIANBLOG = {
 		Exporter.loadPage = false;
 		var archives = Exporter.main.getElementById("sidebar").getElementsByTagName('div')[0].getElementsByTagName("a"); //div[@id='sidebar']/div[1]/a");
 		Exporter.log('found archives.length: '+archives.length);
-		var result = new Array();
+		var result = [];
 		for(var i=2; i<archives.length; i++){
 			var url = archives[i].getAttribute("href");
 			if(url.indexOf("http://")!=0)
@@ -55,7 +55,7 @@ Exporter.Services.PERSIANBLOG = {
 		var temp = scriptStr.match(/_cc=([^;]+)/), i=0;
 		temp = temp[1].replace('{','').replace('}','').split(',');
 		Exporter.log('setCC temp: '+temp.toString());
-		Exporter.Services.PERSIANBLOG._cc = new Object();
+		Exporter.Services.PERSIANBLOG._cc = {};
 		for(i; i<temp.length; i++){
 			var xTmp = temp[i].split(':');
 			Exporter.Services.PERSIANBLOG._cc[xTmp[0]] = parseInt(xTmp[1]);
@@ -140,9 +140,9 @@ Exporter.Services.PERSIANBLOG = {
 	},
 	parseComments			: function(){
 		var divs = Exporter.doXPath(Exporter.main, "//body/form/div[@class='m']");
-		var result = new Array();
+		var result = [];
 		for(var i=1; i<divs.length; i++){ // we don't nedd first div
-			var tObj = new Object();
+			var tObj = {};
 			var header = divs[i].getElementsByTagName("div")[0];
 			var spans = header.getElementsByTagName('span');
 			tObj.url = "";

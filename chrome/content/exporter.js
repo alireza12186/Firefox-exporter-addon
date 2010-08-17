@@ -12,9 +12,9 @@ var Exporter = {
 	intTimeZone	: null,
 	PARSER		: null,
 	loadPage	: true,
-	archives	: new Array(),
-	comments	: new Array(),
-	extended	: new Array(),
+	archives	: [],
+	comments	: [],
+	extended	: [],
 	progressWin : false,
 	browser		: null, // iframe which will be used to load pages
 	jsLoader	: Components.classes["@mozilla.org/moz/jssubscript-loader;1"].getService(Components.interfaces.mozIJSSubScriptLoader),
@@ -287,16 +287,16 @@ var Exporter = {
 		Exporter.strBlogId = null;
 		Exporter.step = 0;
 		Exporter.secondStep = false;
-		Exporter.WXR.posts = new Array();
+		Exporter.WXR.posts = [];
 		Exporter.WXR.commentCount = 1;
 		Exporter.level = null;
 		Exporter.commentsScript = null;
 		Exporter.intTimeZone = null;
 		Exporter.PARSER	= null;
 		Exporter.loadPage = true;
-		Exporter.archives = new Array();
-		Exporter.comments = new Array();
-		Exporter.extended = new Array();
+		Exporter.archives = [];
+		Exporter.comments = [];
+		Exporter.extended = [];
 		Exporter.progressWin = false;
 	},
 	consoleService	: Components.classes["@mozilla.org/consoleservice;1"].getService(Components.interfaces.nsIConsoleService),

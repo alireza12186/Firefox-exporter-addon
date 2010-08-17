@@ -34,7 +34,7 @@ Exporter.Services.BLOGSKY = {
 		var archives = Exporter.doXPath(Exporter.main, "//div[@id='sidebar']/div[@class='menu']/select[@onchange]/option");
 		// we don't need first option
 		archives.shift();
-		var result = new Array();
+		var result = [];
 		for(var i in archives){
 			var url = archives[i].getAttribute("value");
 			if(url.indexOf("http://")!=0)
@@ -55,13 +55,13 @@ Exporter.Services.BLOGSKY = {
 	 */
 	parsePosts		: function(){
 		var posts = Exporter.doXPath(Exporter.main, "//div[@id='main']/div[@class='post']");
-		var result = new Array();
+		var result = [];
 		for(var i in posts){
 			var post = posts[i];
 			var links = post.getElementsByTagName("a");
 			var divs = post.getElementsByTagName("div");
 			var postLinks = divs[2].getElementsByTagName("a");
-			var tempObj = new Object();
+			var tempObj = {};
 			tempObj.id = parseInt(links[0].getAttribute("href").match(/\/post-([0-9]+)\/$/)[1]);
 			tempObj.title = links[0].innerHTML;
 			tempObj.link = links[0].getAttribute("href");
@@ -84,7 +84,7 @@ Exporter.Services.BLOGSKY = {
 			tempObj.date = new Date(parseInt(date[0]), parseInt(date[1])-1, parseInt(date[2]), parseInt(time[0]), parseInt(time[1]), 0);
 			tempObj.category = ""; // we don't need it yet
 			tempObj.author = divs[divs.length-2].getElementsByTagName('a')[0].innerHTML;
-			tempObj.media = new Array();
+			tempObj.media = [];
 			var images = post.getElementsByTagName('img');
 			for(var jj=0, jjlen=images.length; jj<jjlen; jj++)
 				if(images[jj].hasAttribute('src')){
@@ -118,11 +118,11 @@ Exporter.Services.BLOGSKY = {
 	 */
 	parseComments			: function(){
 		var comments = Exporter.doXPath(Exporter.main, "//body/div[@class='comment']//div[@class='left']");
-		var result = new Array();
+		var result = [];
 		for(var i in comments){
 			var comment = comments[i];
 			var divs = comment.getElementsByTagName("div");
-			var tempObj = new Object();
+			var tempObj = {};
 			tempObj.author = divs[0].innerHTML;
 			var time = divs[1].getElementsByTagName('span')[0].innerHTML.match(/([0-9]+):([0-9]+)$/);
 			time = Exporter.clear0(time);

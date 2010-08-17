@@ -32,7 +32,7 @@ Exporter.Services.BLOGFA = {
 	 */
 	parseArchive		: function(){
 		var archives = Exporter.doXPath(Exporter.main, "//body/div/div[3]//a");
-		var result = new Array();
+		var result = [];
 		for(var i in archives){
 			var url = archives[i].getAttribute("href");
 			if(url.indexOf("http://")!=0)
@@ -55,13 +55,13 @@ Exporter.Services.BLOGFA = {
 		if(Exporter.step==0)
 			Exporter.Services.BLOGFA.getIntTimeZone();
 		var posts = Exporter.doXPath(Exporter.main, "//body/div/div[3]/div[@class='post']");
-		var result = new Array();
+		var result = [];
 		for(var i in posts){
 			var post = posts[i];
 			var links = post.getElementsByTagName("a");
 			var divs = post.getElementsByTagName("div");
 			var postLinks = divs[1].getElementsByTagName("a");
-			var tempObj = new Object();
+			var tempObj = {};
 			tempObj.id = parseInt(links[0].getAttribute("name"));
 			tempObj.title = links[1].innerHTML;
 			tempObj.link = links[1].getAttribute("href");
@@ -86,7 +86,7 @@ Exporter.Services.BLOGFA = {
 			} catch(e){
 				tempObj.author = null;
 			}
-			tempObj.media = new Array();
+			tempObj.media = [];
 			var images = post.getElementsByTagName('img');
 			for(var jj=0, jjlen=images.length; jj<jjlen; jj++)
 				if(images[jj].hasAttribute('src')){
@@ -182,11 +182,11 @@ Exporter.Services.BLOGFA = {
 	 */
 	parseComments			: function(){
 		var comments = Exporter.doXPath(Exporter.main, "//body/div[1]/div[@class='box']");
-		var result = new Array();
+		var result = [];
 		for(var i in comments){
 			var comment = comments[i];
 			var divs = comment.getElementsByTagName("div");
-			var tempObj = new Object();
+			var tempObj = {};
 			tempObj.author = comment.getElementsByTagName("span")[0].innerHTML;
 			var time = divs[2].innerHTML.match(/([0-9]+):([0-9]+)$/);
 			time = Exporter.clear0(time);

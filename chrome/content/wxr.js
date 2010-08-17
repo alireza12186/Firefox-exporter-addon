@@ -1,6 +1,6 @@
 
 Exporter.WXR = {
-	posts		: new Array(),
+	posts		: [],
 	commentCount	: 1,
 	insertPost	: function(data){
 		var channel = Exporter.result.getElementsByTagName("channel")[0];

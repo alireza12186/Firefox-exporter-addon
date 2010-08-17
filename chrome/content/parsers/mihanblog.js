@@ -32,7 +32,7 @@ Exporter.Services.MIHANBLOG = {
 	 */
 	parseArchive		: function(){
 		var archives = Exporter.doXPath(Exporter.main, "//body/div[@class='CONBG']/div[@class='CON']/div[@class='SC']/div[@class='cb_general']/a");
-		var result = new Array();
+		var result = [];
 		for(var i in archives){
 			var url = archives[i].getAttribute("href").replace(/^\//, '');
 			if(url.indexOf("http://")!=0)
@@ -53,7 +53,7 @@ Exporter.Services.MIHANBLOG = {
 	 */
 	parsePosts		: function(){
 		var posts = Exporter.doXPath(Exporter.main, "//body/div[@class='CONBG']/div[@class='CON']/div[@class='SC']/div[@class='Post clearfix']");
-		var result = new Array();
+		var result = [];
 		for(var i in posts){
 			var post = posts[i];
 			if(!post.getAttribute("id") || !post.getAttribute("id").match(/^[0-9]+$/))
@@ -67,7 +67,7 @@ Exporter.Services.MIHANBLOG = {
 			var links = post.getElementsByTagName("a");
 			var divs = post.getElementsByTagName("div");
 			var postLinks = divs[3].getElementsByTagName("a");
-			var tempObj = new Object();
+			var tempObj = {};
 			tempObj.id = parseInt(posts[i].id);
 			tempObj.title = links[0].innerHTML;
 			tempObj.link = links[0].getAttribute("href").replace(/^\//, '');
@@ -89,7 +89,7 @@ Exporter.Services.MIHANBLOG = {
 			tempObj.date = new Date(date[0], date[1]-1, date[2], 0, 0, 0);
 			tempObj.category = "";
 			tempObj.author = links[1].innerHTML;
-			tempObj.media = new Array();
+			tempObj.media = [];
 			var images = post.getElementsByTagName('img');
 			for(var jj=0, jjlen=images.length; jj<jjlen; jj++)
 				if(images[jj].hasAttribute('src')){
@@ -114,7 +114,7 @@ Exporter.Services.MIHANBLOG = {
 	 */
 	getCommentsCountByScript	: function(id){
 		if(!Exporter.commentsScript)
-			Exporter.commentsScript = new Array();
+			Exporter.commentsScript = [];
 		if(!Exporter.commentsScript[id]){
 			var scripts = Exporter.doXPath(Exporter.main, "//script");
 			for(var i in scripts)
@@ -154,11 +154,11 @@ Exporter.Services.MIHANBLOG = {
 	 */
 	parseComments			: function(){
 		var comments = Exporter.doXPath(Exporter.main, "//body/div[@class='comment_list']/div[@class='comment']");
-		var result = new Array();
+		var result = [];
 		for(var i in comments){
 			var comment = comments[i];
 			var divs = comment.getElementsByTagName("div");
-			var tempObj = new Object();
+			var tempObj = {};
 			tempObj.author = divs[1].innerHTML;
 			var tmp = divs[2].innerHTML.split(' ');
 			var timeTmp = tmp[1].split(':');
