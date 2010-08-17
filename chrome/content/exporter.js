@@ -16,14 +16,14 @@ var Exporter = {
 	comments	: new Array(),
 	extended	: new Array(),
 	progressWin : false,
+	browser		: null, // iframe which will be used to load pages
 	jsLoader	: Components.classes["@mozilla.org/moz/jssubscript-loader;1"].getService(Components.interfaces.mozIJSSubScriptLoader),
-	init		: function(){
+	init		: function(aEvent){
 		try {
-			Exporter.main = gBrowser.selectedBrowser.contentDocument;
+			Exporter.main = aEvent.originalTarget;
 			if(Exporter.PARSER)
 				Exporter.log('belong result: '+Exporter.PARSER.belongs());
 			if(Exporter.weblog!=null && Exporter.PARSER && Exporter.PARSER.belongs()){
-				Exporter.removeIFrame();
 				if(Exporter.level==null && Exporter.archives.length==0){
 					// we are in first level parse the archive urls
 					Exporter.archives = Exporter.PARSER.parseArchive();
@@ -195,12 +195,9 @@ var Exporter = {
 			Exporter.jsLoader.loadSubScript("chrome://exporter/content/common.js");
 			Exporter.jsLoader.loadSubScript("chrome://exporter/content/wxr.js");
 		}
-		if(Exporter.progressWin==false || Exporter.progressWin.document==null){
-			Exporter.progressWin = window.open("chrome://exporter/content/progress.xul", "exporter_progress_win", "chrome,width=330,height=110");
-			if(Exporter.level!=null) // just reopen progressWin if we are exporting now
-				return;
-		} else {
-			Exporter.updateProgress();
+		if(Exporter.progressWin!=false && Exporter.progressWin.document==null && Exporter.level!=null){
+			// just reopen progressWin if we are exporting now
+			Exporter.progressWin = window.open("chrome://exporter/content/progress.xul", "exporter_progress_win", "chrome,width=350,height=140");
 			return;
 		}
 		for(var i=0; i<Exporter.wSystems.length; i++){
@@ -225,33 +222,36 @@ var Exporter = {
 						var _f = gBrowser.selectedBrowser.contentDocument.location.href.match(/blogID=([0-9]+)/i);
 						Exporter.PARSER.weblogId = _f[1];
 					}
-					Exporter.goTo(Exporter.weblog+Exporter.PARSER.archive);
+					Exporter.progressWin = window.open("chrome://exporter/content/progress.xul", "exporter_progress_win", "chrome,width=350,height=140");
+					window.setTimeout(function(){ // make sure dom of progress has been loaded
+						Exporter.goTo(Exporter.weblog+Exporter.PARSER.archive);
+					}, 500);
 					return;
 				} catch(e) {
 					Exporter.log('ERROR: '+e.message+'\n'+e.fileName+':'+e.lineNumber);
 				}
 			}
 		}
-		alert("برای امنیت شما باید اول وارد مدیریت وبلاگ شوید");
+		alert(Exporter.jsProperties.getString('login'));
 	},
-	removeIFrame	: function(){
-		var iFrames = Exporter.main.getElementsByTagName("iframe");
-		for(var i=0; i<iFrames.length; i++)
-			iFrames[i].parentNode.removeChild(iFrames[i]);
+	entities : {from: '<>&"', to: ['&lt;','&gt;','&amp;','&quot;']},
+	encode_entities : function(s){
+		for(var i=0, len=Exporter.entities.from.length; i<len; i++)
+			s = s.replace(new RegExp(Exporter.entities.from[i],'g'), Exporter.entities.to[i]);
+		return s;
 	},
-	goTo		: function(url, refURL){
-		if(!refURL)
-			refURL = Exporter.weblog;
+	goTo		: function(url){
 		Exporter.log('Exporter.goto: Exporter.pageLoad: '+Exporter.loadPage);
 		if(Exporter.loadPage==false){
-			window.setTimeout("Exporter.goTo('"+url+"','"+refURL+"');", 500);
+			window.setTimeout("Exporter.goTo('"+url+"');", 500);
 			return;
 		}
 		Exporter.log('Exporter.goTo: '+url);
-		var ios = Components.classes["@mozilla.org/network/io-service;1"].getService(Components.interfaces.nsIIOService);
-		var ref = ios.newURI(refURL, null, null);
-		Exporter.firstScript = null;
-		gBrowser.selectedBrowser.loadURI(url, ref, "UTF-8");
+		if(Exporter.progressWin!=false && Exporter.progressWin.document!=null){
+			Exporter.progressWin.document.getElementById('status').innerHTML =
+				Exporter.jsProperties.getFormattedString('loading', [Exporter.encode_entities(url)]);
+		}
+		Exporter.browser.contentDocument.location.href = url;
 	},
 	save		: function(){
 		try{
@@ -438,6 +438,24 @@ var Exporter = {
 Exporter.result = Exporter.domParser.parseFromString(Exporter.baseStr, "text/xml");
 
 window.addEventListener("load", function() {
-	if(document.getElementById("appcontent"))
-		document.getElementById("appcontent").addEventListener("DOMContentLoaded", Exporter.init, true);
+	if(document.getElementById("appcontent")){
+		Exporter.jsProperties = document.getElementById("exporter-js-properties");
+		if(!Exporter.jsProperties)
+			Exporter.log('js properties not found');
+		Exporter.browser = document.createElement("iframe"); // iframe (or browser on older Firefox)
+		Exporter.browser.setAttribute("id", "exporter-browser");
+		Exporter.browser.setAttribute("name", "exporter-browser");
+		Exporter.browser.setAttribute("type", "content");
+		Exporter.browser.setAttribute("collapsed", "true");
+		document.getElementById("main-window").appendChild(Exporter.browser);
+		Exporter.browser.style.height = "0px";
+		Exporter.browser.style.width = "0px";
+		Exporter.browser.webNavigation.allowAuth = false;
+		Exporter.browser.webNavigation.allowImages = false;
+		Exporter.browser.webNavigation.allowJavascript = false;
+		Exporter.browser.webNavigation.allowMetaRedirects = true;
+		Exporter.browser.webNavigation.allowPlugins = false;
+		Exporter.browser.webNavigation.allowSubframes = false;
+		Exporter.browser.addEventListener("DOMContentLoaded", Exporter.init, true);
+	}
 }, false);

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 <!DOCTYPE overlay SYSTEM "chrome://exporter/locale/progress.dtd">
-<window title="&progress.title;" orient="horizontal" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<window title="&progress.title;" orient="horizontal" xmlns:html="http://www.w3.org/1999/xhtml" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 	<vbox flex="1">
 		<hbox flex="1">
 			<!-- use vbox/hbox to avoid setting width for labels -->
@@ -12,16 +12,16 @@
 			</vbox>
 			<vbox flex="1">
 				<hbox>
-					<progressmeter id="posts_prog" mode="determined" value="0"/>
-					<label id="posts_label" value="0/0" />
+					<progressmeter flex="1" id="posts_prog" mode="determined" value="0"/>
+					<label id="posts_label" style="width: 50px" value="0/0" />
 				</hbox>
 				<hbox>
-					<progressmeter id="comments_prog" mode="determined" value="0"/>
-					<label id="comments_label" value="0/0" />
+					<progressmeter flex="1" id="comments_prog" mode="determined" value="0"/>
+					<label id="comments_label" style="width: 50px" value="0/0" />
 				</hbox>
 				<hbox>
-					<progressmeter id="extended_prog" mode="determined" value="0"/>
-					<label id="extended_label" value="0/0" />
+					<progressmeter flex="1" id="extended_prog" mode="determined" value="0"/>
+					<label id="extended_label" style="width: 50px" value="0/0" />
 				</hbox>
 			</vbox>
 		</hbox>
