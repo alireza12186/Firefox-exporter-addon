@@ -89,7 +89,7 @@ Exporter.WXR = {
 		comment.appendChild(Exporter.WXR.createTextNode("\n"));
 		
 		// create wp:comment_id
-		var comment_id = Exporter.WXR.createElement("wp:comment_id", Exporter.WXR.commentCount);
+		var comment_id = Exporter.WXR.createElement("wp:comment_id", Exporter.WXR.commentCount++);
 		// insert wp:comment_id to wp:comment
 		comment.appendChild(comment_id);
 		comment.appendChild(Exporter.WXR.createTextNode("\n"));
@@ -140,7 +140,6 @@ Exporter.WXR = {
 		// insert comment to post
 		Exporter.WXR.posts[postID].appendChild(comment);
 		Exporter.WXR.posts[postID].appendChild(Exporter.WXR.createTextNode("\n"));
-		Exporter.WXR.commentCount++;
 	},
 	addExtended	: function(postID, extended){
 		var pContent = Exporter.WXR.posts[postID].getElementsByTagName("content:encoded")[0];

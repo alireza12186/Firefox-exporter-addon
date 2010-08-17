@@ -440,7 +440,7 @@ Exporter.result = Exporter.domParser.parseFromString(Exporter.baseStr, "text/xml
 window.addEventListener("load", function() {
 	if(document.getElementById("appcontent")){
 		Exporter.jsProperties = document.getElementById("exporter-js-properties");
-		Exporter.browser = document.createElement("iframe"); // iframe (or browser on older Firefox)
+		Exporter.browser = document.createElement("iframe");
 		Exporter.browser.setAttribute("id", "exporter-browser");
 		Exporter.browser.setAttribute("name", "exporter-browser");
 		Exporter.browser.setAttribute("type", "content");
