@@ -54,8 +54,6 @@ Exporter.Services.BLOGSKY = {
 	 *	object: (int)id, (str)title, (str)link, (str)content, (int)commentsCount, (boolean)extended, (Date)date, (array(str))category
 	 */
 	parsePosts		: function(){
-		if(Exporter.step==0)
-			Exporter.Services.BLOGFA.getIntTimeZone();
 		var posts = Exporter.doXPath(Exporter.main, "//div[@id='main']/div[@class='post']");
 		var result = new Array();
 		for(var i in posts){

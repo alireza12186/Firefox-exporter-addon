@@ -132,7 +132,7 @@ Exporter.Services.PERSIANBLOG = {
 	},
 	getCommentsCountByScript	: function(p){
 		if(Exporter.Services.PERSIANBLOG._cc==null)
-			Exporter.Services.PERSIANBLOG._cc = gBrowser.selectedBrowser.contentWindow._cc;
+			return 0;
 		return Exporter.Services.PERSIANBLOG._cc[Exporter.Services.PERSIANBLOG.idToMainId[p]];
 	},
 	postToCommentURL		: function(pID){

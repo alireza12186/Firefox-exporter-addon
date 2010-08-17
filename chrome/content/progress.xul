@@ -4,7 +4,6 @@
 <window title="&progress.title;" orient="horizontal" xmlns:html="http://www.w3.org/1999/xhtml" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 	<vbox flex="1">
 		<hbox flex="1">
-			<!-- use vbox/hbox to avoid setting width for labels -->
 			<vbox>
 				<label value="&exporter.posts;" />
 				<label value="&exporter.comments;" />
