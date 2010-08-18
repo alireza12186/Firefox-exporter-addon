@@ -60,31 +60,32 @@ Exporter.Services.BLOGSKY = {
 			var post = posts[i];
 			var links = post.getElementsByTagName("a");
 			var divs = post.getElementsByTagName("div");
-			var postLinks = divs[2].getElementsByTagName("a");
+			var postLinks = divs[1].getElementsByTagName("a");
 			var tempObj = {};
 			tempObj.id = parseInt(links[0].getAttribute("href").match(/\/post-([0-9]+)\/$/)[1]);
 			tempObj.title = links[0].innerHTML;
 			tempObj.link = links[0].getAttribute("href");
 			if(tempObj.link.indexOf("http://")!=0)
 				tempObj.link = Exporter.weblog+tempObj.link.replace(/^[\/]{1}/, "");
-			footerLinks = divs[3].getElementsByTagName('a');
+			footerLinks = divs[divs.length-2].getElementsByTagName('a');
 			tempObj.commentsCount = (footerLinks.length-1>0 && footerLinks[footerLinks.length-1].hasAttribute('onclick'))?parseInt(footerLinks[footerLinks.length-1].innerHTML.match(/^([0-9]+)/)[1]):0;
 			if(postLinks.length>0 && postLinks[postLinks.length-1].hasAttribute("href") && postLinks[postLinks.length-1].getAttribute("href").indexOf("http://")!=0)
 				postLinks[postLinks.length-1].setAttribute("href", Exporter.weblog+postLinks[postLinks.length-1].getAttribute("href").replace(/^[\/]{1}/, ""));
 			tempObj.extended = (postLinks.length>0 && postLinks[postLinks.length-1].getAttribute("href")==tempObj.link && postLinks[postLinks.length-1].innerHTML==" \u0627\u062f\u0627\u0645\u0647 \u0645\u0637\u0644\u0628 ...")?true:false;
 			if(tempObj.extended==true)
 				postLinks[postLinks.length-1].parentNode.removeChild(postLinks[postLinks.length-1]);
-			Exporter.removeNode(divs[2]);
-			tempObj.content = divs[2].innerHTML;
-			var date = divs[1].innerHTML.match(/^([0-9]+\/[0-9]+\/[0-9]+)/)[1].split('/'); // YYYY/MM/DD
+			Exporter.removeNode(divs[1]); // cleans up the content
+			tempObj.content = divs[1].innerHTML;
+			var date = divs[0].innerHTML.match(/^([0-9]+\/[0-9]+\/[0-9]+)/)[1].split('/'); // YYYY/MM/DD
 			date = Exporter.clear0(date);
 			date = Exporter.JalaliDate.jalaliToGregorian(parseInt(date[0]), parseInt(date[1]), parseInt(date[2]));
-			var time = divs[1].getElementsByTagName('span')[0].innerHTML.match(/([0-9]+:[0-9]+)/)[1].split(":"); // HH:SS
+			var time = divs[0].getElementsByTagName('span')[0].innerHTML.match(/([0-9]+:[0-9]+)/)[1].split(":"); // HH:SS
 			time = Exporter.clear0(time);
 			tempObj.date = new Date(parseInt(date[0]), parseInt(date[1])-1, parseInt(date[2]), parseInt(time[0]), parseInt(time[1]), 0);
 			tempObj.category = ""; // we don't need it yet
 			tempObj.author = divs[divs.length-2].getElementsByTagName('a')[0].innerHTML;
 			tempObj.media = [];
+			post.removeChild(divs[divs.length-1]); // removes links to social networks
 			var images = post.getElementsByTagName('img');
 			for(var jj=0, jjlen=images.length; jj<jjlen; jj++)
 				if(images[jj].hasAttribute('src')){
@@ -123,6 +124,7 @@ Exporter.Services.BLOGSKY = {
 			var comment = comments[i];
 			var divs = comment.getElementsByTagName("div");
 			var tempObj = {};
+			divs[0].removeChild(divs[0].firstChild); // removes gravatar image
 			tempObj.author = divs[0].innerHTML;
 			var time = divs[1].getElementsByTagName('span')[0].innerHTML.match(/([0-9]+):([0-9]+)$/);
 			time = Exporter.clear0(time);
