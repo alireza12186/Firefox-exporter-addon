@@ -90,7 +90,7 @@ Exporter.Services.MIHANBLOG = {
 			tempObj.category = "";
 			tempObj.author = links[1].innerHTML;
 			tempObj.media = [];
-			var images = post.getElementsByTagName('img');
+			var images = divs[3].getElementsByTagName('img');
 			for(var jj=0, jjlen=images.length; jj<jjlen; jj++)
 				if(images[jj].hasAttribute('src')){
 					if(/^http:\/\//.test(images[jj].getAttribute('src')))
