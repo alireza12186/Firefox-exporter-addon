@@ -1,0 +1,5 @@
+The main reason of developing this addon is giving ability to Persian bloggers (who blog about politics, society & other things that government don't like) to migrate their weblog to global services like blogger/wordpress. also they can make backup of their weblog to use it when their weblog closed by service provider or banned by government. so they can write without being worried about that their IP would be given to the government by weblog provider.
+
+addon is modular so any other weblog systems without export tool could be added.
+
+want to use it? check http://web3b.wordpress.com/2008/12/17/export-import-blogger-wordpress/ (in Persian) or https://addons.mozilla.org/en-US/firefox/addon/8672/ (in English)
