@@ -31,6 +31,12 @@ Exporter.WXR = {
 		// insert wp:post_id to item
 		Exporter.WXR.posts[data.id].appendChild(post_id);
 		Exporter.WXR.posts[data.id].appendChild(Exporter.WXR.createTextNode("\n"));
+
+		// create wp:post_type
+		var post_type = Exporter.WXR.createElement("wp:post_type", 'post');
+		// insert wp:post_id to item
+		Exporter.WXR.posts[data.id].appendChild(post_type);
+		Exporter.WXR.posts[data.id].appendChild(Exporter.WXR.createTextNode("\n"));
 		
 		// create wp:post_name
 		var post_name = Exporter.WXR.createElement("wp:post_name", data.id);
