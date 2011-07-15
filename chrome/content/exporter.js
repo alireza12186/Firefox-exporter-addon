@@ -243,7 +243,7 @@ var Exporter = {
 	goTo		: function(url){
 		Exporter.log('Exporter.goto: Exporter.pageLoad: '+Exporter.loadPage);
 		if(Exporter.loadPage==false){
-			window.setTimeout("Exporter.goTo('"+url+"');", 500);
+			window.setTimeout(function(){ Exporter.goTo(url); }, 500);
 			return;
 		}
 		Exporter.log('Exporter.goTo: '+url);
