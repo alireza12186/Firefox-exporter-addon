@@ -11,7 +11,7 @@ Exporter.Services.BLOGFA = {
 	 *	returns weblog URL when we are in adminPanel
 	 */
 	getWeblogFromPanel	: function(){
-		var wLink = Exporter.main.getElementById("PanelMenu1_linkBlog");
+		var wLink = Exporter.main.getElementById("linkBlog");
 		return wLink.getAttribute("href").replace(/[\/]{1}$/, "")+"/"; // make sure that we have fSlash
 	},
 	/*
