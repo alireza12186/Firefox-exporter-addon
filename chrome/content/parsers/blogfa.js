@@ -181,31 +181,20 @@ Exporter.Services.BLOGFA = {
 	 *	object: [(STR)author, (Date)date, (STR)email, (STR) url, (STR) content]
 	 */
 	parseComments			: function(){
-		var comments = Exporter.doXPath(Exporter.main, "//body/div[1]/div[@class='box']");
+		var comments = Exporter.doXPath(Exporter.main, "//body/div[2]/div[@class='box']");
 		var result = [];
 		for(var i in comments){
 			var comment = comments[i];
 			var divs = comment.getElementsByTagName("div");
 			var tempObj = {};
-			tempObj.author = comment.getElementsByTagName("span")[0].innerHTML;
-			var time = divs[2].innerHTML.match(/([0-9]+):([0-9]+)$/);
+			tempObj.author = comment.getElementsByTagName("a")[0].innerHTML;
+			var time = Exporter.p2e(divs[2].innerHTML).match(/([0-9]+):([0-9]+)$/);
 			time = Exporter.clear0(time);
-			var dateTMP = divs[2].innerHTML.match(/([0-9]+) ([^0-9]+)([0-9]+)/);
+			var dateTMP = Exporter.p2e(divs[2].innerHTML).match(/([0-9]+) ([^0-9]+) ([0-9]+)/);
 			dateTMP = Exporter.clear0(dateTMP);
 			var gDate = Exporter.JalaliDate.jalaliToGregorian(parseInt(dateTMP[3]), Exporter.strToMonth(dateTMP[2]), parseInt(dateTMP[1]));
 			tempObj.date = new Date(gDate[0], gDate[1]-1, gDate[2], time[1], time[2], 0);
-			var lastDivLinks = divs[divs.length-1].getElementsByTagName("a");
-			tempObj.email = "";
-			tempObj.url = "";
-			if(lastDivLinks.length==2){
-				tempObj.email = lastDivLinks[1].getAttribute("href").split(":")[1];
-				tempObj.url = lastDivLinks[0].getAttribute("href");
-			} else if(lastDivLinks.length==1) {
-				if(lastDivLinks[0].getAttribute("href").indexOf("@")>-1)
-					tempObj.email = lastDivLinks[0].getAttribute("href").split(":")[1];
-				else
-					tempObj.url = lastDivLinks[0].getAttribute("href");
-			}
+			tempObj.url = comment.getElementsByTagName("a")[0].getAttribute('href');
 			tempObj.content = divs[4].innerHTML;
 			result.push(tempObj);
 		}
