@@ -403,6 +403,14 @@ var Exporter = {
 			a[nn] = a[nn].replace(/^0/, '');
 		return a;
 	},
+	p2e : function(str){
+		var p = "\u0660\u06f1\u0662\u06f3\u0664\u0665\u0666\u0667\u06f8\u0669\u06f3\u06f1\u06f1\u0664\u06f8\u0662\u0665\u0660\u06f8\u0662\u06f1\u06f3\u0666\u0669\u0667\u0667\u0665\u06f8\u06f3\u06f2\u06f7\u06f6\u06f4\u06f5\u06f9\u06f0";
+		var e = "012345678931148250821369775832764590";
+		for(var i=0; i<p.length; i++)
+			str = str.replace(p[i], e[i]);
+		Exporter.log('p2e converter: '+str);
+		return str;
+	},
 	updateProgress : function(){
 		var total = 0;
 		var progressmeter = null;

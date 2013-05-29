@@ -86,12 +86,12 @@ Exporter.Services.PERSIANBLOG = {
 			tempObj.author = divs[divs.length-3].getElementsByTagName('a')[1].innerHTML;
 			var temp = divs[divs.length-3].innerHTML.split(";");
 			//Exporter.log(PERSIANBLOG.p2e(temp[1]));
-			var time = Exporter.Services.PERSIANBLOG.p2e(temp[1]).match(/([0-9]+):([0-9]+)/); // HH:mm
+			var time = Exporter.p2e(temp[1]).match(/([0-9]+):([0-9]+)/); // HH:mm
 			time = Exporter.clear0(time);
 			if(temp[1].indexOf("\u0628.\u0638")>-1)
 				time[1] = parseInt(time[1])+12;
 			//Exporter.log("Converted Date:"+PERSIANBLOG.p2e(temp[2]));
-			var date = Exporter.Services.PERSIANBLOG.p2e(temp[2]).match(/([0-9]+)\/([0-9]+)\/([0-9]+)/); // YYYY/MM/DD
+			var date = Exporter.p2e(temp[2]).match(/([0-9]+)\/([0-9]+)\/([0-9]+)/); // YYYY/MM/DD
 			date = Exporter.clear0(date);
 			var gDate = Exporter.JalaliDate.jalaliToGregorian(parseInt(date[1]), parseInt(date[2]), parseInt(date[3]))
 			tempObj.date = new Date(gDate[0], gDate[1]-1, gDate[2], parseInt(time[1]), parseInt(time[2]), 0);
@@ -122,14 +122,6 @@ Exporter.Services.PERSIANBLOG = {
 		}
 		return result;
 	},
-	p2e				: function(str){
-		var p = "\u0660\u06f1\u0662\u06f3\u0664\u0665\u0666\u0667\u06f8\u0669\u06f3\u06f1\u06f1\u0664\u06f8\u0662\u0665\u0660\u06f8\u0662\u06f1\u06f3\u0666\u0669\u0667\u0667\u0665\u06f8\u06f3";
-		var e = "01234567893114825082136977583";
-		for(var i=0; i<p.length; i++)
-			str = str.replace(p[i], e[i]);
-		Exporter.log('p2e convertor: '+str);
-		return str;
-	},
 	getCommentsCountByScript	: function(p){
 		if(Exporter.Services.PERSIANBLOG._cc==null)
 			return 0;
@@ -155,14 +147,14 @@ Exporter.Services.PERSIANBLOG = {
 			} else
 				tObj.author = spans[0].innerHTML;
 			if(Exporter.debug==true)
-				Exporter.log('comment author: '+Exporter.Services.PERSIANBLOG.p2e(spans[0].innerHTML));
-			var time = Exporter.Services.PERSIANBLOG.p2e(spans[2].innerHTML).match(/([0-9]+):([0-9]+)/);
+				Exporter.log('comment author: '+Exporter.p2e(spans[0].innerHTML));
+			var time = Exporter.p2e(spans[2].innerHTML).match(/([0-9]+):([0-9]+)/);
 			time = Exporter.clear0(time);
 			if(spans[2].innerHTML.indexOf("\u0628.\u0638")>-1)
 				time[1] = parseInt(time[1])+12;
 			if(Exporter.debug==true)
-				Exporter.log('converted numbers: '+Exporter.Services.PERSIANBLOG.p2e(spans[2].innerHTML));
-			var date = Exporter.Services.PERSIANBLOG.p2e(spans[3].innerHTML).match(/([0-9]+)\s+([^0-9\s]+)\s+([0-9]+)/);
+				Exporter.log('converted numbers: '+Exporter.p2e(spans[2].innerHTML));
+			var date = Exporter.p2e(spans[3].innerHTML).match(/([0-9]+)\s+([^0-9\s]+)\s+([0-9]+)/);
 			date = Exporter.clear0(date);
 			if(Exporter.debug==true)
 				Exporter.log('found date: '+date[1]+"-"+date[2]+"-"+date[3]);
