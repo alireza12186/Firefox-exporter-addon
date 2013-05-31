@@ -187,14 +187,16 @@ Exporter.Services.BLOGFA = {
 			var comment = comments[i];
 			var divs = comment.getElementsByTagName("div");
 			var tempObj = {};
-			tempObj.author = comment.getElementsByTagName("a")[0].innerHTML;
+			tempObj.author = divs[1].textContent;
 			var time = Exporter.p2e(divs[2].innerHTML).match(/([0-9]+):([0-9]+)$/);
 			time = Exporter.clear0(time);
 			var dateTMP = Exporter.p2e(divs[2].innerHTML).match(/([0-9]+) ([^0-9]+) ([0-9]+)/);
 			dateTMP = Exporter.clear0(dateTMP);
 			var gDate = Exporter.JalaliDate.jalaliToGregorian(parseInt(dateTMP[3]), Exporter.strToMonth(dateTMP[2]), parseInt(dateTMP[1]));
 			tempObj.date = new Date(gDate[0], gDate[1]-1, gDate[2], time[1], time[2], 0);
-			tempObj.url = comment.getElementsByTagName("a")[0].getAttribute('href');
+			try {
+				tempObj.url = comment.getElementsByTagName("a")[0].getAttribute('href');
+			} catch(e) {}
 			tempObj.content = divs[4].innerHTML;
 			result.push(tempObj);
 		}
